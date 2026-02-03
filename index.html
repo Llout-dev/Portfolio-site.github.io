@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просина К.М. - Цифровой художник-дизайнер</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Дополнительные стили для авторизации */
+        .auth-links {
+            display: flex;
+            gap: 15px;
+            margin-left: 20px;
+        }
+        
+        .auth-link {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            font-size: 14px;
+        }
+        
+        .auth-link:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            margin-left: 20px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .user-name {
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        
+        .logout-btn:hover {
+            color: var(--accent);
+        }
+        
+        /* Стили для умного приветствия */
+        .personal-greeting {
+            background: linear-gradient(135deg, var(--accent), rgba(68, 55, 78, 0.8));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 20px auto;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(23, 18, 36, 0.2);
+            max-width: 800px;
+            display: none;
+        }
+        
+        .greeting-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .greeting-text h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+        
+        .greeting-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Стили для фонового SVG-кота (ТОЛСТЫЕ ЛИНИИ как в оригинале) */
+        .background-cat {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+            max-width: 1200px;
+            max-height: 1200px;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.8; /* ПРАВИЛЬНАЯ прозрачность для десктопа */
+            transition: opacity 1s ease-out;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        
+        .background-cat svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .background-cat .path {
+            fill: none;
+            stroke: var(--text);
+            stroke-width: 30; /* Толстая линия как в оригинале */
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw-background 10s ease-in-out forwards;
+        }
+        
+        /* Анимация для фонового кота */
+        @keyframes draw-background {
+            0% {
+                stroke-dashoffset: 1000;
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.3;
+            }
+            to {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+        }
+        
+        /* Дополнительный эффект для темной темы */
+        [data-theme="dark"] .background-cat .path {
+            stroke: rgba(255, 255, 255, 0.2);
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.05));
+        }
+        
+        [data-theme="light"] .background-cat .path {
+            stroke: rgba(0, 0, 0, 0.15);
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.08));
+        }
+        
+        /* Адаптивность для фонового кота */
+        @media (max-width: 1200px) {
+            .background-cat {
+                width: 90vw;
+                height: 90vh;
+                opacity: 0.06; /* Более прозрачный на планшетах */
+            }
+            
+            .background-cat .path {
+                stroke-width: 25; /* Немного тоньше на планшетах */
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .background-cat {
+                width: 100vw;
+                height: 100vh;
+                opacity: 0.04; /* Еще прозрачнее на телефонах */
+            }
+            
+            .background-cat .path {
+                stroke-width: 20; /* Еще тоньше на телефонах */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .background-cat {
+                opacity: 0.02; /* Очень прозрачный на маленьких экранах */
+            }
+            
+            .background-cat .path {
+                stroke-width: 15; /* Тонкий на маленьких экранах */
+            }
+        }
+        
+        /* Плавное появление контента */
+        main {
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 0.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированный фон -->
+    <div class="animated-bg"></div>
+
+    <!-- Кастомный курсор -->
+    <div class="custom-cursor"></div>
+
+    <!-- Фоновый SVG кот с ТОЛСТЫМИ ЛИНИЯМИ -->
+    <div class="background-cat">
+        <svg viewBox="0 0 294.32 369">
+            <path class="path" d="M229.89,134.5c-27.78-21.87-54.96-19.02-82.73-14.35-16.2,2.73-22.19-32.93-25.02-49.12-1.53-8.76-5.19-17.61-10.57-26.3-4.09-6.6-12.84-8.84-19.42-4.7-12.17,7.66-34.45,8.51-49.11,1.88-7.82-3.54-16.95.76-19.4,8.98-7.05,23.64-11.4,44.45,6.31,66.37,15.77,19.52,25.18,83.28,29.48,120.82,1.26,10.97,13.97,16.39,22.76,9.71,15.56-11.82,30.18-15.74,39.04-2.71,5.2,7.64,16.01,8.69,22.24,1.86,23.2-25.45,45.5-28.57,66.58-1.84,6.71,8.51,20.06,6.76,24.3-3.21,18.85-44.31,53.98-137.71,38.73-186.74-13.12-42.17-61.13-51.41-76.17-15" />
+        </svg>
+    </div>
+
+    <!-- Экран загрузки с дверями -->
+    <div id="loading" class="loading">
+        <div id="preloader">
+            <div class="svg1">
+                <svg id="svg1" viewBox="0 0 300 400">
+                    <defs>
+                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow id="dropShadow" dx="0" dy="5" stdDeviation="10" flood-color="rgba(233, 81, 140, 0.5)" />
+                        </filter>
+                    </defs>
+                    <path id="path1" d="M201.9,189.55c-8-50-25-85-60-96-15.67-4.93-17.69-26.78-20.52-42.96-1.53-8.76-5.19-17.61-10.57-26.3-4.09-6.6-12.84-8.84-19.42-4.7-12.17,7.66-34.45,8.51-49.11,1.88-7.82-3.54-16.95.76-19.4,8.98-7.05,23.64-9.69,53.19,8.02,75.11,15.77,19.52-6.91,101.49,6,137,4,11,14,7,21,2s7-11,16-11c7.07,0,7.78,15,17,15,23,0,27,0,83,1,37.33.67,83,9,76,48s-77,27-97,5" filter="url(#shadow)" />
+                </svg>
+            </div>
+
+            <!-- Отдельный контейнер для текста -->
+            <div class="text-wrapper">
+                <p class="loading-text">LEFT ON THE ELEVATOR</p>
+            </div>
+        </div>
+        <div id="door-wrapper">
+            <div id="door-left"></div>
+            <div id="door-right"></div>
+        </div>
+    </div>
+
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo" data-text="LEFT ON THE ELEVATOR">LEFT ON THE ELEVATOR</a>
+
+            <nav class="nav">
+                <ul>
+                    <li><a href="portfolio.html" class="nav-link" data-text="Портфолио">Портфолио</a></li>
+                    <li><a href="services.html" class="nav-link" data-text="Услуги">Услуги</a></li>
+                    <li><a href="about.html" class="nav-link" data-text="Обо мне">Обо мне</a></li>
+                    <li><a href="contacts.html" class="nav-link" data-text="Контакты">Контакты</a></li>
+                    <li><a href="tz.html" class="nav-link" data-text="ТЗ">ТЗ</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Блок авторизации -->
+            <div id="authBlock" class="auth-links">
+                <a href="login.html" class="auth-link">Вход</a>
+                <a href="register.html" class="auth-link">Регистрация</a>
+            </div>
+            
+            <!-- Блок информации о пользователе -->
+            <div id="userBlock" class="user-info">
+                <div class="user-avatar" id="userAvatar">П</div>
+                <div>
+                    <div class="user-name" id="userName"></div>
+                    <button class="logout-btn" onclick="logout()">Выйти</button>
+                </div>
+            </div>
+            
+            <button class="theme-toggle" type="button" aria-label="Переключить тему" id="themeToggle">Тема</button>
+
+            <div class="burger">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Умное приветствие -->
+    <div id="personalGreeting" class="personal-greeting"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="title-line">Цифровой</span>
+                        <span class="title-line">художник</span>
+                        <span class="title-line accent" style="animation-delay: 0.3s">Просина К.М.</span>
+                    </h1>
+                    <p class="hero-description">Создаю уникальные визуальные миры на стыке 2D, 3D и анимации. Превращаю идеи в цифровое искусство.</p>
+                    <div class="hero-buttons">
+                        <a href="portfolio.html" class="btn btn-primary">
+                            <span>Смотреть работы</span>
+                            <div class="btn-hover"></div>
+                        </a>
+                        <a href="contacts.html" class="btn btn-secondary">
+                            <span>Обсудить проект</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="floating-card card-1">
+                        <div class="card-content">3D Art</div>
+                    </div>
+                    <div class="floating-card card-2">
+                        <div class="card-content">Animation</div>
+                    </div>
+                    <div class="floating-card card-3">
+                        <div class="card-content">Design</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">
+                <div class="scroll-line"></div>
+                <span>Scroll</span>
+            </div>
+        </section>
+
+        <!-- Featured Works -->
+        <section class="featured-works">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Избранные проекты</h2>
+                    <p class="section-subtitle">Лучшие работы, демонстрирующие разнообразие стилей и техник</p>
+                </div>
+
+                <div class="works-grid">
+                <div class="work-item" data-category="illustration">
+                    <div class="work-image">
+                        <img src="img/реф.jpg" alt="Референс персонажа - Иллюстрация" class="work-img">
+                        <div class="image-overlay">
+                            <div class="view-project">Просмотреть проект</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <h3>Референс персонажа</h3>
+                        <p>Разработка уникальных референсов персонажей для любых целей</p>
+                        <span class="work-category">Illustration</span>
+                    </div>
+                </div>
+                
+                <div class="work-item large" data-category="3d">
+                    <div class="work-image">
+                        <img src="img/3д.jpg" alt="Домик у реки - 3D Моделирование" class="work-img">
+                        <div class="image-overlay">
+                            <div class="view-project">Просмотреть проект</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <h3>Домик у реки</h3>
+                        <p>Созданная по туториалу 3D-среда</p>
+                        <span class="work-category">3D Art</span>
+                    </div>
+                </div>
+
+                <div class="work-item large" data-category="animation">
+                    <div class="work-image">
+                        <img src="img/моушн.gif" alt="Моушн-графика - Анимация" class="work-img">
+                        <div class="image-overlay">
+                            <div class="view-project">Просмотреть проект</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <h3>Моушн-графика</h3>
+                        <p>Анимированный брендинг</p>
+                        <span class="work-category">Animation</span>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Services Preview -->
+        <section class="services-preview">
+            <!-- Добавьте этот div сразу после открывающего тега section -->
+            <div class="services-bg"></div>
+    
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Направления работы</h2>
+                    <p class="section-subtitle">Комплексный подход к созданию цифрового контента</p>
+                </div>
+
+                <div class="services-grid">
+                    <div class="service-card" data-service="3d">
+                        <div class="service-icon">3D</div>
+                        <h3>3D Моделирование</h3>
+                        <p>Создание персонажей, окружения и объектов для игр, фильмов и визуализаций</p>
+                        <ul class="service-features">
+                            <li>Персонажи</li>
+                            <li>Окружение</li>
+                            <li>Ригинг</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card" data-service="design">
+                        <div class="service-icon">UI</div>
+                        <h3>UI/UX Дизайн</h3>
+                        <p>Проектирование интерфейсов, ориентированных на пользовательский опыт</p>
+                        <ul class="service-features">
+                            <li>Веб-интерфейсы</li>
+                            <li>Мобильные приложения</li>
+                            <li>Прототипирование</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card" data-service="animation">
+                        <div class="service-icon">MOV</div>
+                        <h3>Анимация</h3>
+                        <p>2D и 3D анимация, моушн-графика для рекламы и контента</p>
+                        <ul class="service-features">
+                            <li>2D Анимация</li>
+                            <li>Моушн-графика</li>
+                            <li>Визуальные эффекты</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">LEFT ON THE ELEVATOR</div>
+                    <p>Создаю цифровое искусство на стыке технологий и творчества</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Навигация</h4>
+                        <a href="portfolio.html">Портфолио</a>
+                        <a href="services.html">Услуги</a>
+                        <a href="about.html">Обо мне</a>
+                        <a href="tz.html">ТЗ</a>
+                        <a href="login.html">Вход</a>
+                        <a href="register.html">Регистрация</a>
+                    </div>
+
+                    <div class="link-group">
+                        <h4>Контакты</h4>
+                        <a href="mailto:hello@example.com">Email</a>
+                        <a href="#">Instagram</a>
+                        <a href="#">ArtStation</a>
+                        <a href="#">Behance</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Просина К.М. LEFT ON THE ELEVATOR. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Функции для работы с пользователями
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('artist_users')) || [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('artist_users', JSON.stringify(users));
+        }
+
+        function updateAuthUI() {
+            const currentUser = JSON.parse(localStorage.getItem('current_user'));
+            const authBlock = document.getElementById('authBlock');
+            const userBlock = document.getElementById('userBlock');
+            const greetingEl = document.getElementById('personalGreeting');
+            
+            if (currentUser) {
+                // Пользователь авторизован
+                if (authBlock) authBlock.style.display = 'none';
+                if (userBlock) {
+                    userBlock.style.display = 'flex';
+                    document.getElementById('userName').textContent = currentUser.name;
+                    document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+                }
+                
+                // Показываем приветствие
+                if (greetingEl) {
+                    const registrationDate = new Date(currentUser.registrationDate);
+                    const daysSinceRegistration = Math.floor((new Date() - registrationDate) / (1000 * 60 * 60 * 24));
+                    
+                    let message = `Добро пожаловать, ${currentUser.name}!`;
+                    if (daysSinceRegistration < 7) {
+                        message += ` Рады видеть вас среди наших клиентов!`;
+                    }
+                    
+                    greetingEl.innerHTML = `
+                        <div class="greeting-content">
+                            <div class="greeting-text">
+                                <h3>${message}</h3>
+                                <p>Доступ к эксклюзивному контенту и персональные условия сотрудничества</p>
+                            </div>
+                            <div class="greeting-stats">
+                                <div class="stat-item">
+                                    <span>Проектов просмотрено:</span>
+                                    <strong>${currentUser.viewedProjects || 0}</strong>
+                                </div>
+                                <div class="stat-item">
+                                    <span>В системе:</span>
+                                    <strong>${daysSinceRegistration} дн.</strong>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    greetingEl.style.display = 'block';
+                }
+            } else {
+                // Пользователь не авторизован
+                if (authBlock) authBlock.style.display = 'flex';
+                if (userBlock) userBlock.style.display = 'none';
+                if (greetingEl) greetingEl.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('current_user');
+            updateAuthUI();
+            showNotification('Вы успешно вышли из системы');
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--accent);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Функция для плавного исчезновения фонового кота при скролле
+        function handleCatOpacity() {
+            const cat = document.querySelector('.background-cat');
+            if (!cat) return;
+            
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+            
+            // Начинаем уменьшать opacity после 100px прокрутки
+            const startFade = 100;
+            const fullFade = windowHeight * 0.8; // Полностью исчезает на 80% высоты экрана
+            
+            if (scrollPosition > startFade) {
+                // Рассчитываем opacity от текущего CSS значения до 0
+                const computedOpacity = parseFloat(getComputedStyle(cat).opacity);
+                const fadeProgress = Math.min((scrollPosition - startFade) / (fullFade - startFade), 1);
+                const newOpacity = computedOpacity * (1 - fadeProgress);
+                cat.style.opacity = Math.max(newOpacity, 0).toFixed(3);
+                
+                // Также можно добавить небольшое увеличение прозрачности при скролле
+                cat.style.filter = `drop-shadow(0 2px ${4 * (1 - fadeProgress)}px rgba(0, 0, 0, ${0.1 * (1 - fadeProgress)}))`;
+            } else {
+                // Восстанавливаем начальные значения из CSS
+                cat.style.opacity = '';
+                cat.style.filter = '';
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            
+            // Обновляем статистику просмотров
+            const currentUser = JSON.parse(localStorage.getItem('current_user'));
+            if (currentUser) {
+                currentUser.viewedProjects = (currentUser.viewedProjects || 0) + 1;
+                localStorage.setItem('current_user', JSON.stringify(currentUser));
+            }
+            
+            // Обработка скролла для фонового кота
+            window.addEventListener('scroll', handleCatOpacity);
+            
+            // Инициализируем начальное состояние
+            handleCatOpacity();
+            
+            // Ресайз окна для адаптивности
+            window.addEventListener('resize', handleCatOpacity);
+            
+            // Добавляем стили для анимации уведомлений
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes slideOut {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                }
+                
+                /* Плавная анимация для всего контента */
+                .hero, .featured-works, .services-preview {
+                    transform: translateY(20px);
+                    opacity: 0;
+                    animation: contentFadeIn 1s ease forwards;
+                }
+                
+                .hero {
+                    animation-delay: 0.2s;
+                }
+                
+                .featured-works {
+                    animation-delay: 0.4s;
+                }
+                
+                .services-preview {
+                    animation-delay: 0.6s;
+                }
+                
+                @keyframes contentFadeIn {
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+                
+                /* Анимация для фонового кота при смене темы */
+                .background-cat .path {
+                    transition: stroke 0.5s ease, filter 0.5s ease;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
