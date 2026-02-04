@@ -1,0 +1,1303 @@
+/* ������� ����� � ����� */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #171224;
+    --secondary: #44374E;
+    --accent: #EA538D;
+    --background: #ffffff;
+    --surface: #D7E6EA;
+    --text: #171224;
+    --text-light: #44374E;
+    --border: #D7E6EA;
+    --shadow: 0 10px 30px rgba(23, 18, 36, 0.15);
+    --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Light theme variables - явно задаем светлые цвета */
+[data-theme="light"] {
+    --background: #ffffff;
+    --surface: #D7E6EA;
+    --text: #171224;
+    --text-light: #44374E;
+    --border: rgba(215, 230, 234, 0.5);
+    --shadow: 0 10px 30px rgba(23, 18, 36, 0.15);
+}
+
+/* Dark theme variables */
+[data-theme="dark"] {
+    --background: #171224;
+    --surface: #44374E;
+    --text: #D7E6EA;
+    --text-light: rgba(215, 230, 234, 0.7);
+    --border: rgba(68, 55, 78, 0.5);
+    --shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif; /* Заменяем Inter на Montserrat */
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--background);
+    overflow-x: hidden;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Заголовки - жирные (700-800) */
+.hero-title,
+.section-title,
+.work-info h3,
+.service-card h3,
+.link-group h4,
+.footer-brand .logo {
+    font-weight: 700; /* Жирный для заголовков */
+}
+
+.hero-title {
+    font-weight: 800; /* Еще жирнее для главного заголовка */
+}
+
+/* Меньший текст - нормальный (400-500) */
+.hero-description,
+.section-subtitle,
+.work-info p,
+.service-card p,
+.nav-link,
+.btn,
+.footer p,
+.loading-text {
+    font-weight: 400; /* Нормальный вес */
+}
+
+/* Специфичные настройки */
+.logo {
+    font-weight: 700; /* Лого - жирный */
+}
+
+.nav-link {
+    font-weight: 500; /* Навигация - средний вес */
+}
+
+.btn {
+    font-weight: 600; /* Кнопки - полужирные */
+}
+
+/* Loading Screen */
+#loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 10000;
+    background: transparent !important;
+}
+
+#preloader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    z-index: 10002;
+    transition: opacity 0.5s ease-in-out;
+    background: transparent;
+    width: 100%;
+    padding: 0 20px; /* Отступы по бокам для всего контейнера */
+    box-sizing: border-box;
+}
+
+.svg1 {
+    width: 200px; /* Возвращаем компактный размер для кота */
+    z-index: 10002;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0 10px;
+    /* Убираем ограничение по ширине для всего контейнера */
+    max-width: none;
+}
+
+#svg1 {
+    position: relative;
+    width: 100%;
+    height: auto;
+    background: none;
+    /* SVG остается своим размером */
+    max-width: 100%;
+}
+
+@keyframes morph {
+    0% {
+        d: path("M201.9,189.55c-8-50-25-85-60-96-15.67-4.93-17.69-26.78-20.52-42.96-1.53-8.76-5.19-17.61-10.57-26.3-4.09-6.6-12.84-8.84-19.42-4.7-12.17,7.66-34.45,8.51-49.11,1.88-7.82-3.54-16.95.76-19.4,8.98-7.05,23.64-9.69,53.19,8.02,75.11,15.77,19.52-6.91,101.49,6,137,4,11,14,7,21,2s7-11,16-11c7.07,0,7.78,15,17,15,23,0,27,0,83,1,37.33.67,83,9,76,48s-77,27-97,5");
+        transform: translate(14px, 30px);
+    }
+    100% {
+        d: path("M201.9,189.55c-8-50-25-85-60-96-15.67-4.93-17.69-26.78-20.52-42.96-1.53-8.76-5.19-17.61-10.57-26.3-4.09-6.6-12.84-8.84-19.42-4.7-12.17,7.66-34.45,8.51-49.11,1.88-7.82-3.54-16.95.76-19.4,8.98-7.05,23.64-9.69,53.19,8.02,75.11,15.77,19.52-6.91,101.49,6,137,4,11,14,7,21,2s7-11,16-11c7.07,0,7.78,15,17,15,23,0,27,0,83,1,37.33.67,85,9,78,48s-65,38-99,27");
+        transform: translate(14px, 35px);
+    }
+}
+
+.loading-text {
+    color: var(--text);
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-top: 20px;
+    min-height: 2.5rem;
+    text-align: center;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    white-space: pre-wrap; /* ВАЖНО: сохраняем пробелы и переносы */
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    line-height: 1.4;
+    font-family: 'Montserrat', sans-serif; /* Добавляем шрифт */
+}
+
+.text-wrapper {
+    width: 100vw; /* На всю ширину экрана */
+    max-width: 600px; /* Но не слишком широко */
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.phrase-char {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+    white-space: pre; /* Сохраняем пробелы в символах */
+}
+
+.phrase-space {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    width: 0.3em; /* Ширина пробела */
+}
+
+#path1 {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 30;
+    stroke-linecap: round;
+    z-index: 10002;
+    animation: morph 1s ease-in-out infinite alternate;
+}
+
+#door-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    background-color: transparent !important;
+    transition: all 1s ease-out;
+    z-index: 10001;
+}
+
+#door-left, #door-right {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10001;
+    background: var(--background);
+    transition: clip-path 0.8s ease-out, transform 0.8s ease-out;
+}
+
+[data-theme="light"] #door-wrapper {
+    background-color: #ffffff;
+}
+
+[data-theme="dark"] #door-wrapper {
+    background-color: #0f1013;
+}
+
+[data-theme="light"] #door-left,
+[data-theme="light"] #door-right {
+    background: #ffffff;
+}
+
+[data-theme="dark"] #door-left,
+[data-theme="dark"] #door-right {
+    background: #0f1013;
+}
+
+/* === ВАРИАНТ 1: Диагональ (оригинальный) === */
+.doors-variant-1 #door-left {
+    clip-path: polygon(0 10%, 100% 90%, 100% 100%, 0 100%);
+}
+
+    .doors-variant-1 #door-left.active {
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    }
+
+.doors-variant-1 #door-right {
+    clip-path: polygon(0 0, 100% 0, 100% 91%, 0 11%);
+}
+
+    .doors-variant-1 #door-right.active {
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+
+/* === ВАРИАНТ 2: Диагональ в другую сторону === */
+.doors-variant-2 #door-left {
+    clip-path: polygon(0 90%, 100% 10%, 100% 100%, 0 100%);
+}
+
+    .doors-variant-2 #door-left.active {
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    }
+
+.doors-variant-2 #door-right {
+    clip-path: polygon(0 0, 100% 0, 100% 10%, 0 90%);
+}
+
+    .doors-variant-2 #door-right.active {
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+
+/* === ВАРИАНТ 3: Диагональ (анти-оригинал) === */
+.doors-variant-3 #door-left {
+    clip-path: polygon(10% 0, 90% 100%, 0 100%, 0 0);
+}
+
+    .doors-variant-3 #door-left.active {
+        clip-path: polygon(0 0, 0 100%, 0 100%, 0 0);
+    }
+
+.doors-variant-3 #door-right {
+    clip-path: polygon(10% 0, 90% 100%, 100% 100%, 100% 0);
+}
+
+    .doors-variant-3 #door-right.active {
+        clip-path: polygon(100% 0, 100% 100%, 100% 100%, 100% 0);
+    }
+
+/* === ВАРИАНТ 4: Диагональ (анти-диагональ) === */
+.doors-variant-4 #door-left {
+    clip-path: polygon(90% 0, 10% 100%, 0 100%, 0 0);
+}
+
+    .doors-variant-4 #door-left.active {
+        clip-path: polygon(0 0, 0 100%, 0 100%, 0 0);
+    }
+
+.doors-variant-4 #door-right {
+    clip-path: polygon(90% 0, 10% 100%, 100% 100%, 100% 0);
+}
+
+    .doors-variant-4 #door-right.active {
+        clip-path: polygon(100% 0, 100% 100%, 100% 100%, 100% 0);
+    }
+
+/* === ВАРИАНТ 5: Вертикальное открытие (как лифт) === */
+.doors-variant-5 #door-left {
+    clip-path: polygon(51% 0, 51% 100%, 0 100%, 0 0);
+}
+
+    .doors-variant-5 #door-left.active {
+        clip-path: polygon(0 0, 0 100%, 0 100%, 0 0);
+    }
+
+.doors-variant-5 #door-right {
+    clip-path: polygon(50% 0, 50% 100%, 100% 100%, 100% 0);
+}
+
+    .doors-variant-5 #door-right.active {
+        clip-path: polygon(100% 0, 100% 100%, 100% 100%, 100% 0);
+    }
+
+
+/* === ВАРИАНТ 6: Шторки (поднимаются вверх) === */
+.doors-variant-6 #door-left {
+    clip-path: polygon(0 51%, 100% 51%, 100% 0, 0 0);
+}
+
+    .doors-variant-6 #door-left.active {
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+
+.doors-variant-6 #door-right {
+    clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+}
+
+    .doors-variant-6 #door-right.active {
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    }
+
+/* Floating Header SVG Cat */
+.svg2 {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 450px;
+    height: 430px;
+    z-index: 999;
+    background: none;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.svg2.visible {
+    opacity: 1;
+    animation: up 1s ease-in-out forwards;
+}
+
+@keyframes up {
+    0% {
+        transform: translate(-50%, 100px);
+        opacity: 0;
+    }
+
+    70% {
+        transform: translate(-50%, -8px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+#loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 10000;
+    background: transparent !important;
+}
+
+#svg2 {
+    position: relative;
+    width: 100%;
+    height: auto;
+    background: none;
+}
+
+#svg2 .path {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 30;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    stroke-linecap: round;
+    animation: draw 5s ease-in-out forwards;
+}
+
+.svg2.scrolled {
+    /* Можно добавить легкое уменьшение или изменение прозрачности */
+    opacity: 0.95;
+}
+
+@keyframes draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Animated Background */
+.animated-bg {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 30% 70%, rgba(255, 51, 102, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 70% 30%, rgba(0, 0, 0, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 51, 102, 0.03) 0%, transparent 50%);
+    z-index: -1;
+    animation: bgRotate 30s linear infinite;
+    transform-origin: center center;
+}
+
+@keyframes bgRotate {
+    0% { transform: rotate(0deg) scale(1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Custom Cursor */
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.2s, opacity 0.2s;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+}
+
+.custom-cursor.hover {
+    transform: translate(-50%, -50%) scale(1.5);
+    background: var(--accent);
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    transition: var(--transition);
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-family: 'Montserrat', sans-serif;
+}
+
+[data-theme="light"] .header {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="dark"] .header {
+    background: rgba(20, 21, 26, 0.85);
+}
+
+.header.scrolled {
+    padding: 1rem 0;
+    box-shadow: var(--shadow);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: nowrap; /* Предотвращает перенос элементов */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px; /* �������� ������� */
+}
+
+
+.logo {
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    position: relative;
+    display: inline-block;
+    text-decoration: none; /* when used as <a> */
+    color: var(--text);
+}
+
+.logo:hover,
+.logo:visited,
+.logo:link {
+    color: var(--text); /* keep same color as text, no link blue/purple */
+    text-decoration: none;
+}
+
+.logo::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block; /* match normal text flow */
+    line-height: inherit; /* keep baseline alignment */
+    color: var(--accent);
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    transition: clip-path 0.6s ease;
+    pointer-events: none;
+}
+
+.logo:hover::before {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+/* Navigation */
+.nav ul {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: nowrap; /* Не переносить пункты меню */
+    white-space: nowrap; /* Не переносить текст внутри ссылок */
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    position: relative;
+    padding: 0.5rem 1rem; /* ������� ������� */
+    transition: var(--transition);
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.nav-link::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block; /* match text box */
+    line-height: inherit; /* align baselines */
+    padding: inherit; /* respect link padding so text starts at same x */
+    color: var(--accent);
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    transition: clip-path 0.4s ease;
+    pointer-events: none;
+}
+
+.nav-link:hover::before,
+.nav-link.active::before {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+/* Burger Menu */
+.burger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 4px;
+}
+
+.burger span {
+    width: 20px;
+    height: 2px;
+    background: var(--primary);
+    transition: var(--transition);
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 80px 40px 0; /* Добавляем отступ сверху для кота */
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.title-line {
+    display: block;
+    overflow: hidden;
+}
+
+.title-line .char {
+    display: inline-block;
+    animation: slideUp 0.8s cubic-bezier(0.5, 0, 0, 1) both;
+    animation-delay: calc(40ms * var(--char-index));
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}
+
+.accent {
+    color: var(--accent);
+}
+
+.hero-description {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-hover {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s;
+}
+
+.btn-primary:hover .btn-hover {
+    left: 100%;
+}
+
+/* Hero Visual */
+.hero-visual {
+    position: relative;
+    height: 500px;
+    width: 100%;
+    overflow: visible; /* �������� ��� �� �������� */
+}
+
+.floating-card {
+    position: absolute;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    animation: float 6s ease-in-out infinite;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+[data-theme="light"] .floating-card { background: white; }
+[data-theme="dark"] .floating-card { background: var(--surface); }
+[data-theme="light"] .work-item { background: var(--surface); }
+[data-theme="dark"] .work-item { background: var(--surface); }
+[data-theme="light"] .work-image { background: var(--border); color: var(--text-light); }
+[data-theme="dark"] .work-image { background: var(--border); color: var(--text-light); }
+[data-theme="light"] .footer { background: var(--primary); }
+[data-theme="dark"] .footer { background: #000000; }
+
+/* Theme Toggle */
+.theme-toggle {
+    margin-left: 1rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+}
+
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ���������� ������� ��� �������� */
+.card-1 {
+    top: 15%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.card-2 {
+    top: 45%;
+    right: 5%;
+    animation-delay: -2s;
+}
+
+.card-3 {
+    bottom: 25%;
+    left: 15%;
+    animation-delay: -4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    font-size: 0.8rem;
+}
+
+.scroll-line {
+    width: 1px;
+    height: 50px;
+    background: var(--text-light);
+    animation: scrollLine 2s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+    0%, 100% { transform: scaleY(0); opacity: 0; }
+    50% { transform: scaleY(1); opacity: 1; }
+}
+
+/* Sections */
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Featured Works */
+.featured-works {
+    padding: 100px 0;
+}
+
+.works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.work-item {
+    background: var(--surface);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: var(--transition);
+    position: relative;
+    margin: 10px; /* ������� ������ */
+}
+
+.work-item.large {
+    grid-column: span 2;
+}
+
+.work-item:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow);
+}
+
+.work-image {
+    width: 100%;
+    height: 300px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+}
+
+.work-item.large .work-image {
+    height: 400px;
+}
+
+.work-info {
+    padding: 1.5rem;
+}
+
+.work-info h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.work-info p {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.work-category {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    background: var(--accent);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Services Preview */
+.services-preview {
+    padding: 100px 0;
+    background: var(--surface);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.service-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: var(--transition);
+    border: 1px solid var(--border);
+    margin: 10px; /* ������� ������ */
+}
+
+[data-theme="light"] .service-card {
+    background: white;
+}
+
+[data-theme="dark"] .service-card {
+    background: var(--surface);
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
+
+.service-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.service-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.service-card p {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+.service-features {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.service-features li {
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+/* Footer */
+.footer {
+    background: var(--primary);
+    color: white;
+    padding: 4rem 0 2rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    margin-bottom: 3rem;
+}
+
+.footer-brand .logo {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+}
+
+.link-group h4 {
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+.link-group a {
+    display: block;
+    color: #ccc;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+}
+
+.link-group a:hover {
+    color: white;
+}
+
+.footer-bottom {
+    border-top: 1px solid #333;
+    padding-top: 2rem;
+    text-align: center;
+    color: #888;
+}
+
+/* ������������ */
+@media (max-width: 968px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .hero-visual {
+        height: 300px;
+        order: -1;
+    }
+    
+    .work-item.large {
+        grid-column: span 1;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 20px; /* �������� ������� �� ��������� */
+    }
+    
+    .hero {
+        padding: 0 20px;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0.8rem; /* �������� ������� ������ */
+    }
+    
+    .floating-card {
+        width: 120px;
+        height: 120px;
+        padding: 1rem;
+    }
+    
+    .card-1 {
+        top: 10%;
+        left: 2%;
+    }
+    
+    .card-2 {
+        top: 50%;
+        right: 2%;
+    }
+    
+    .card-3 {
+        bottom: 20%;
+        left: 10%;
+    }
+
+    .svg1 {
+        width: 180px;
+    }
+
+    .loading-text {
+        font-size: 1rem;
+        max-width: 300px;
+        padding: 0 15px;
+        white-space: normal; /* На мобилках разрешаем нормальные переносы */
+        word-break: keep-all; /* Сохраняем целостность слов */
+    }
+
+    .text-wrapper {
+        max-width: 90vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .hero {
+        padding: 0 15px;
+    }
+    
+    .nav ul {
+        gap: 1rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .svg2 {
+        width: 300px;
+        height: 300px;
+        top: 10px;
+    }
+
+    .svg1 {
+        width: 150px;
+    }
+
+    .loading-text {
+        font-size: 0.9rem;
+        max-width: 250px;
+        min-height: 3rem;
+    }
+
+    .text-wrapper {
+        max-width: 85vw;
+    }
+}
+
+main {
+    margin-top: 0;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Скрываем контент до открытия дверей */
+body.loading-active main,
+body.loading-active .header,
+body.loading-active .footer {
+    display: none;
+}
+
+
+/* Стили для изображений работ */
+.work-image {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    overflow: hidden; /* Скрывает выходящие за границы части */
+    border-radius: 10px 10px 0 0; /* Скругление только сверху */
+}
+
+.work-item.large .work-image {
+    height: 400px;
+}
+
+.work-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Сохраняет пропорции и заполняет контейнер */
+    transition: transform 0.5s ease;
+}
+
+.work-item:hover .work-img {
+    transform: scale(1.05); /* Легкое увеличение при наведении */
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 10px 10px 0 0;
+}
+
+.work-item:hover .image-overlay {
+    opacity: 1;
+}
+
+.view-project {
+    color: white;
+    padding: 10px 20px;
+    background: var(--accent);
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.work-item:hover .view-project {
+    transform: translateY(0);
+}
+
+/* Адаптивность для изображений */
+@media (max-width: 768px) {
+    .work-image {
+        height: 250px;
+    }
+    
+    .work-item.large .work-image {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .work-image {
+        height: 200px;
+    }
+    
+    .work-item.large .work-image {
+        height: 250px;
+    }
+    
+    .view-project {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+
+/* Фон для секции "Направления работы" */
+.services-preview {
+    position: relative; /* Важно для позиционирования фона */
+    padding: 100px 0;
+    background: var(--surface);
+    overflow: hidden; /* Чтобы фон не выходил за границы */
+}
+
+.services-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/bg.jpg'); /* Путь к вашей картинке */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(4px) brightness(0.9); /* Размытие и затемнение */
+    z-index: 0; /* Отправляем фон на задний план */
+    transform: scale(1.1); /* Немного увеличиваем для эффекта размытия */
+}
+
+/* Делаем контент поверх фона */
+.services-preview .container {
+    position: relative;
+    z-index: 1; /* Поднимаем контент над фоном */
+}
+
+/* Улучшаем читаемость текста на темном фоне */
+.services-preview .section-title,
+.services-preview .section-subtitle {
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Делаем карточки полупрозрачными */
+.services-preview .service-card {
+    background: rgba(255, 255, 255, 0.35); /* Белый с прозрачностью */
+    backdrop-filter: blur(8px); /* Добавляем размытие самой карточке */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .services-preview .service-card {
+    background: rgba(30, 30, 35, 0.35); /* Темный с прозрачностью */
+}
+
+/* Для светлой темы корректируем контраст */
+[data-theme="light"] .services-preview {
+    background: transparent; /* Убираем старый фон */
+}
+
+[data-theme="light"] .services-preview .service-card {
+    background: rgba(255, 255, 255, 0.75);
+}
+
+[data-theme="dark"] .services-preview {
+    background: transparent;
+}
